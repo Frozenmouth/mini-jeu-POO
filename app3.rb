@@ -12,20 +12,18 @@ puts " -------------------------- "
 
 # Initializing User player character
 puts 'Please enter your name to begin'
-puts username = gets.chomp
+puts name_player = gets.chomp
+my_game = Game.new(name_player)
 
-my_game = Game.new(username)
-while my_game.is_still_ongoing? == true
-  my_game.menu
-  print '> '
-  input = gets.chomp
-  my_game.menu_choice(input)
-  puts 'Press any key to continue'
-  gets.chomp
-  my_game.enemies_attack
-  puts '                     -----------                     '
+while my_game.is_still_ongoing? == true do
+
   my_game.show_players
-  puts '                     -----------                     '
-  puts 'Press any key to continue to the next round'
-  gets.chomp
+  my_game.menu
+  puts "select your action choice"
+  action = gets.chomp.to_s
+  puts
+  my_game.menu_choice(action)
+  my_game.enemies_attack
 end
+
+my_game.end

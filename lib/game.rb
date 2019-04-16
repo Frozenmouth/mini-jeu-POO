@@ -1,84 +1,95 @@
+require "pry"
+
 class Game
-  attr_accessor :human_player, :enemies
+  attr_accessor :humanplayer, :ennemies
 
-# Initialize method automatically creates 4 enemies player as displayed in the array + 1 playable character for the User.
-  def initialize(human_player_username)
-    enemies = []
-    @enemies = ["Ranged creep", "Siege creep", "Melee creep", "Mega creep"]
-    @human_player = HumanPlayer.new(human_player_username)
+# Define enemies and the playable character of the USer
+  def initialize (humanplayer)
+    @humanplayer = HumanPlayer.new("#{humanplayer}",100,1)
+    @player_1 = Player.new("Melee creep", 10)  
+    @player_2 = Player.new("Ranged creep", 10)
+    @player_3 = Player.new("Siege creep", 10)  
+    @player_4 = Player.new("Mega creep", 10)
+    @ennemies = [@player_1, @player_2, @player_3, @player_4]
   end
 
-# Deletes an enemy once it is dead.
-  def kill_player(enemy)
-  enemies.delete(enemy)
+  def kill_player
+    @ennemies.each {
+     |player| 
+    if (player.life_points <= 0)
+      @ennemies.delete(player)
+      puts "#{player.name} is dead"
+    end
+    } 
   end
 
-# Method that returns true if the game is still running and false if not.
   def is_still_ongoing?
-    if @human_player.life_points <= 0 || enemies.size < 1
-      return false
-    else
+    if @humanplayer.life_points > 0 && (@player_1.life_points > 0 || @player_2.life_points > 0 || @player_3.life_points > 0 || @player_4.life_points > 0)
       return true
+    else
+      return false
     end
   end
 
-# Display User player infos + remaining enemies on field
+# Displays User status (HP + weapon lvl) + amount of remaining enemies on field
   def show_players
-    puts @human_player.show_state
-    puts "#{enemies.size} remaining enemies on field"
+    puts
+    @humanplayer.show_state
+    puts "2) #{@ennemies.size} enemies are still fighting"
+    puts
   end
 
-# Display User choice menu in-between rounds
+# Displays selection menu
   def menu
-    puts human_player.show_state
-    puts 
-    puts "Select an action"
+    command = 1
+    puts "what do you want to do ?"
+    puts "a - Look for a better weapon"
+    puts "s - Heal yourself"
     puts
-    puts "Level up"
-    puts "a - get a better weapon"
-    puts "s - heal yourself"
-    puts
-    puts "hit an enemy on sight :"
-    puts " #{player_1.show_state} 0"
-    puts " #{player_2.show_state} 1"
+    puts "Attack an enemy on sight :"
+    @ennemies.each {
+    |player| puts "#{command} - #{player.name} has #{player.life_points} hp"
+    command += 1
+     }
+        
   end
 
-  def menu_select(input)
-    case input
-    when 'a'
-      human_player.search_weapon
-    when 's'
-      human_player.search_health_pack
-    when '0'
-      human_player.attack(enemies[0])
-      kill_player(enemies[0]) if enemies[0].life_points <= 0
-    when '1'
-      human_player.attack(enemies[1])
-      kill_player(enemies[0]) if enemies[1].life_points <= 1
-    when '2'
-      human_player.attack(enemies[2])
-      kill_player(enemies[2]) if enemies[2].life_points <= 2
-    when '3'
-      human_player.attack(enemies[3])
-      kill_player(enemies[3]) if enemies[3].life_points <= 3
+# Defines all User possible choices in-between rounds
+  def menu_choice(action)
+    if action == "a"
+      @humanplayer.search_weapon
+        elsif action == "s"
+      @humanplayer.search_health_pack
+        elsif action == "1"
+      @humanplayer.attack(@player_1)
+        elsif action == "2"
+      @humanplayer.attack(@player_2)
+        elsif action == "3"
+      @humanplayer.attack(@player_3)
+        elsif action == "4"
+      @humanplayer.attack(@player_4)
+        else puts "Please select option a, s, 1, 2, 3 or 4"
     end
+    
+      kill_player
   end
 
-  def enemies_attack
-    enemies.each do |bagarre|
-      bagarre.attack(@human_player)
-      puts '----'
-    end
+  def enemies_attack 
+    puts "Wild cat empire attack !"
+      @ennemies.each { 
+      |player| player.attack(@humanplayer)
+        }
   end
 
+# Game over screen
   def end
-  puts "========> END OF THE GAME <=========="
-  puts
     if humanplayer.life_points > 0
-      puts "Congrats you won !"
+      puts "Winner winner chicken dinner !"
     elsif humanplayer.life_points < 0
-      puts "Take this L noob"
+      puts "Take this L n00b"
     end
+  puts
+  puts "G A M E  O V E R"
+  puts
   end
-end
-
+end 
