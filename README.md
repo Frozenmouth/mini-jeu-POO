@@ -23,7 +23,7 @@ How to launch?
 `ruby app2.rb` / If it fails, please try `bundle exec ruby app2.rb`
 
 # v3.0 - app3.rb
-This time it's versus the world; kill or be killed. Good luck prevailing over 4 bloodthirsty enemies
+This time it's you versus the world; kill or be killed. Good luck prevailing over 4 bloodthirsty enemies
 
 How to launch?
 `ruby app3.rb` / If it fails, please try `bundle exec ruby app3.rb`
